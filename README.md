@@ -3,12 +3,12 @@
 How to use:
 
 - Returns JSON data
-	- http://localhost/rest/api/state/startDate/endDate 
-	- Example: GET http://localhost/rest/api/pr/2021-05-05/2020-05-10
+	- GET http://localhost/rest/api/state/startDate/endDate 
+	- GET http://localhost/rest/api/pr/2021-05-05/2020-05-10
 
 - Returns HTML View:
- 	- http://localhost/rest/state/startDate/endDate
-	- Example: GET http://localhost/rest/pr/2020-05-05/2020-05-10
+ 	- GET http://localhost/rest/state/startDate/endDate
+	- GET http://localhost/rest/pr/2020-05-05/2020-05-10
 
 ## About Laravel
 
