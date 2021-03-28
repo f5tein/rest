@@ -4,7 +4,7 @@ How to use:
 
 - Returns JSON data
 	- GET http://localhost/rest/api/state/startDate/endDate 
-	- GET http://localhost/rest/api/pr/2021-05-05/2020-05-10
+	- GET http://localhost/rest/api/pr/2020-05-05/2020-05-10
 
 - Returns HTML View:
  	- GET http://localhost/rest/state/startDate/endDate
