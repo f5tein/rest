@@ -1,0 +1,18 @@
+body {
+  padding-top: 4.5rem;
+}
+
+.alert-pre {
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+.float-r {
+	float:right;
+	width:100px;
+}
+
+.pb-20 {
+	padding-bottom:20px;
+}
