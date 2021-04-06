@@ -12,7 +12,7 @@ class CasesController extends Controller
     public function index() {
         return redirect()->action(
             [CasesController::class, 'list'], [
-                'state' => 'pr',
+                'state' => 'PR',
                 'startDate' => '2020-05-05',
                 'endDate' => '2020-05-10'
             ]
@@ -21,22 +21,46 @@ class CasesController extends Controller
 
     public function list($state, $startDate, $endDate) { 
 
+        $cases = $this->getTop10Cities($this->getData($state, $endDate));
+
+        $data = array(
+            "state" => $state,
+            "startDate" => new \DateTime($startDate),
+            "endDate" => new \DateTime($endDate),
+            "cases" => $cases,
+        );
+
+        return view('cases/list', $data);
+    }
+
+    public function listAPI($state, $startDate, $endDate) { 
+
+        $cases = $this->getTop10Cities($this->getData($state, $endDate));
+
+        $this->create($cases);
+
+        return response(json_encode($cases, JSON_PRETTY_PRINT), 200);
+    }
+
+
+    public function getData($state, $date) {
+        
         $state = strtoupper($state);
 
-        $url = self::API_URL . "date=$endDate&state=$state";
+        $url = self::API_URL . "date=$date&state=$state";
         $token = "cd06accc7cba9e0b48b4d3106f3ea4359f593725";
 
         $guzzle = new \GuzzleHttp\Client();
-        $response = $guzzle->get($url, [
+        
+        return $guzzle->get($url, [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Authorization' => "Token $token",
             ]
         ]);
+    }
 
-        $startDate = new \DateTime($startDate);
-        $endDate = new \DateTime($endDate);
-
+    public function getTop10Cities($response) {
         $cases = json_decode($response->getBody()->getContents());
         $cases = json_decode(json_encode($cases->results), true);
 
@@ -44,21 +68,9 @@ class CasesController extends Controller
             return $b['confirmed_per_100k_inhabitants'] - $a['confirmed_per_100k_inhabitants'];
         });
 
-        $cases = array_slice($cases, 0, 10);
-        
-        $this->create($cases);
-
-        $data = array(
-            "state" => $state,
-            "startDate" => $startDate,
-            "endDate" => $endDate,
-            "cases" => $cases,
-        );
-
-        return view('cases/list', $data);
-
+        return array_slice($cases, 0, 10);
     }
-
+    
     public function create($cases){
         
         foreach($cases as $key => $case) {
@@ -82,33 +94,5 @@ class CasesController extends Controller
 
             // echo '<pre>$result:: '; print_r($result); echo '</pre>';
         }
-    }
-
-    public function listAPI($state, $startDate, $endDate) { 
-
-        $state = strtoupper($state);
-
-        $url = self::API_URL . "date=$endDate&state=$state";
-        $token = "cd06accc7cba9e0b48b4d3106f3ea4359f593725";
-
-        $guzzle = new \GuzzleHttp\Client();
-        $response = $guzzle->get($url, [
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Authorization' => "Token $token",
-            ]
-        ]);
-
-        $cases = json_decode($response->getBody()->getContents());
-        $cases = json_decode(json_encode($cases->results), true);
-        $cases = array_slice($cases, 0, 10);
-
-        usort($cases, function ($a, $b) { 
-            return $b['confirmed_per_100k_inhabitants'] - $a['confirmed_per_100k_inhabitants'];
-        });
-
-        $this->create($cases);
-
-        return response(json_encode($cases, JSON_PRETTY_PRINT), 200);
     }
 }
