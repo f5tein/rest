@@ -21,7 +21,7 @@ class CasesController extends Controller
 
     public function list($state, $startDate, $endDate) { 
 
-        $cases = $this->getTop10Cities($this->getData($state, $endDate));
+        $cases = $this->getTop10Cities($this->getCases($state, $endDate));
 
         $data = array(
             "state" => $state,
@@ -35,7 +35,7 @@ class CasesController extends Controller
 
     public function listAPI($state, $startDate, $endDate) { 
 
-        $cases = $this->getTop10Cities($this->getData($state, $endDate));
+        $cases = $this->getTop10Cities($this->getCases($state, $endDate));
 
         $this->create($cases);
 
@@ -43,7 +43,7 @@ class CasesController extends Controller
     }
 
 
-    public function getData($state, $date) {
+    public function getCases($state, $date) {
         
         $state = strtoupper($state);
 
@@ -70,7 +70,7 @@ class CasesController extends Controller
 
         return array_slice($cases, 0, 10);
     }
-    
+
     public function create($cases){
         
         foreach($cases as $key => $case) {
