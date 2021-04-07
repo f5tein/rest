@@ -111,16 +111,11 @@ window.addEventListener('load', function() {
         $('#state').val($('#stateId').val());
         $('#search').on("click", function(e){
             e.preventDefault();
-
-                url = "http://localhost:8888/rest/"
-                url += $("#state").val() + "/";
-                url += $("#startDate").val() + "/";
-                url += $("#endDate").val();
+            url = "http://localhost:8888/rest/";
+            url += $("#state").val() + "/";
+            url += $("#startDate").val() + "/";
+            url += $("#endDate").val();
             window.location.replace(url);
-
-            console.log("state", $("#state").val());
-            console.log("startDate", $("#startDate").val());
-            console.log("endDate", $("#endDate").val());
         });
     });
 });
